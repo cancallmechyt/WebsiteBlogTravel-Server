@@ -27,8 +27,9 @@ export const addPost = (req, res) => {
 
     const token = authHeader.split(" ")[1];
     if (!token) return res.status(401).json("Not authenticated!");
-    console.log(token)
-    console.log(req.body)
+
+    const userId = req.body.uid; // use userId from the request body
+
     jwt.verify(token, "jwtkey", (err, userInfo) => {
         if (err) return res.status(403).json("Token is not valid!");
 
@@ -41,7 +42,7 @@ export const addPost = (req, res) => {
             req.body.img,
             req.body.cat,
             req.body.date,
-            userInfo.id,
+            userId, // use userId from the request body
         ];
 
         db.query(q, [values], (err, data) => {
